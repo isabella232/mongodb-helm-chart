@@ -16,17 +16,20 @@ data:
     exec 3>&1
     exec 4>&2
 
-    if [ "${BITNAMI_DEBUG}" = true ]; then
-      echo "==> Bash debug is on"
-    else
-      echo "==> Bash debug is off"
-      exec 1>/dev/null
-      exec 2>/dev/null
-    fi
-
     # Load Libraries
+    . /opt/bitnami/scripts/liblog.sh
     . /opt/bitnami/scripts/libpostgresql.sh
     . /opt/bitnami/scripts/librepmgr.sh
+
+    export MODULE="pre-stop-hook"
+
+    if [[ "${BITNAMI_DEBUG}" == "true" ]]; then
+        info "Bash debug is on"
+    else
+        info "Bash debug is off"
+        exec 1>/dev/null
+        exec 2>/dev/null
+    fi
 
     # Load PostgreSQL & repmgr environment variables
     eval "$(repmgr_env)"
@@ -41,23 +44,22 @@ data:
     postgresql_stop
 
     if [[ "$REPMGR_CURRENT_PRIMARY_HOST" == "$REPMGR_NODE_NETWORK_NAME" ]]; then
-      echo "Primary node need to wait for a new primary node before leaving the cluster"
+        info "Primary node need to wait for a new primary node before leaving the cluster"
 
-      wait="1"
-      while [ "$wait" -eq "1" ]
-      do
-        eval "$(repmgr_set_role)"
+        wait="1"
+        while [[ "$wait" == "1" ]]
+        do
+            eval "$(repmgr_set_role)"
 
-        echo "$REPMGR_CURRENT_PRIMARY_HOST == $REPMGR_NODE_NETWORK_NAME"
-        if [[ "$REPMGR_CURRENT_PRIMARY_HOST" != "$REPMGR_NODE_NETWORK_NAME" ]]; then
-          echo "New primary detected"
-          wait=0
-        fi
-
-        echo "I'm still primary node, waiting for a new primary"
-        sleep 2s
-      done
-      echo "Leaving the cluster"
+            info "$REPMGR_CURRENT_PRIMARY_HOST == $REPMGR_NODE_NETWORK_NAME"
+            if [[ "$REPMGR_CURRENT_PRIMARY_HOST" != "$REPMGR_NODE_NETWORK_NAME" ]]; then
+                info "New primary detected, Leaving the cluster"
+                wait=0
+            else
+                info "I'm still primary node, waiting for a new primary"
+                sleep 2s
+            fi
+        done
     else
-      echo "Standby node doesn't need to wait, leaving the cluster."
+        info "Standby node doesn't need to wait, leaving the cluster."
     fi
