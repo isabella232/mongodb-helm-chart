@@ -3,7 +3,32 @@ entries:
   mongodb-sharded:
   - apiVersion: v1
     appVersion: 4.2.6
-    created: "2020-04-24T19:10:48.928584046+10:00"
+    created: "2020-04-26T14:12:05.342462738+10:00"
+    description: NoSQL document-oriented database that stores JSON-like documents
+      with dynamic schemas, simplifying the integration of data in content-driven
+      applications. Sharded topology.
+    digest: a33f72501d1620577f5945efd22b90e3bc99181d0fa01816ca1bf9dbbe3bdb30
+    home: https://mongodb.org
+    icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+    keywords:
+    - mongodb
+    - database
+    - nosql
+    - cluster
+    - replicaset
+    - replication
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    name: mongodb-sharded
+    sources:
+    - https://github.com/bitnami/bitnami-docker-mongodb-sharded
+    urls:
+    - mongodb-sharded-0.0.1-eba7882b2842a570b903329e458b59d894e352a1.tgz
+    version: 0.0.1-eba7882b2842a570b903329e458b59d894e352a1
+  - apiVersion: v1
+    appVersion: 4.2.6
+    created: "2020-04-26T14:12:05.340383137+10:00"
     description: NoSQL document-oriented database that stores JSON-like documents
       with dynamic schemas, simplifying the integration of data in content-driven
       applications. Sharded topology.
@@ -26,4 +51,4 @@ entries:
     urls:
     - mongodb-sharded-0.0.1-105b955611cd3098eda0c40bc860daac87acab5a.tgz
     version: 0.0.1-105b955611cd3098eda0c40bc860daac87acab5a
-generated: "2020-04-24T19:10:48.924937347+10:00"
+generated: "2020-04-26T14:12:05.336508364+10:00"
